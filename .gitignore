@@ -1,0 +1,17 @@
+portfolio_ui/node_modules/
+portfolio_ui/.pnp.js
+portfolio_ui/.pnp
+
+# testing
+portfolio_ui/coverage
+
+# misc
+portfolio_ui/.DS_Store
+portfolio_ui/.env.local
+portfolio_ui/.env.development.local
+portfolio_ui/.env.test.local
+portfolio_ui/.env.production.local
+
+portfolio_ui/npm-debug.log*
+portfolio_ui/yarn-debug.log*
+portfolio_ui/yarn-error.log*
