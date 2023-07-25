@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import  AIModelSerializer
-from .models import AIModel, SparseAutoencoder
+from .models import AIModel
 import base64
 from PIL import Image
 from rest_framework import viewsets
