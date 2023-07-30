@@ -2,7 +2,7 @@ import { GitHub, LinkedIn } from "@mui/icons-material";
 export const shivanshResume = {
     name: "Shivansh Shrivastava",
     role: "Software Developer | Data Engineer",
-    image: "https://avatars.githubusercontent.com/u/19808076?v=4",
+    image: "https://th.bing.com/th/id/R.7ea4af7d8401d2b43ee841bfa2abe89d?rik=xidyUKdveUKULQ&riu=http%3a%2f%2fpluspng.com%2fimg-png%2fuser-png-icon-download-icons-logos-emojis-users-2240.png&ehk=2%2bOqgdMZqFkKaBclc%2fPL9B86vLju3iBGiFmH64kXaTM%3d&risl=&pid=ImgRaw&r=0",
     bio: "I am Shivansh Shrivastava, a software developer with 1.2 years of experience in developing and maintaining web applications using various technologies such as C#, ASP.NET, Python, Django, React.js, and more. I have worked on projects involving deep learning, image manipulation, encryption, and stock market prediction. I am also skilled in ethical hacking, video editing, and bug hunting. I enjoy cricket, gym, and learning new things.",
     skills: [
       {

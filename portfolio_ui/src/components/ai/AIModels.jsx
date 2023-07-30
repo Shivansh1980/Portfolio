@@ -13,11 +13,14 @@ import {
   Grid
 } from "@mui/material";
 
+import Api from "../../Api";
+
 // Define a custom component for each AI model card
 function AIModelCard(props) {
   // Use state hooks to store the model metadata and prediction
   const [metadata, setMetadata] = useState(null);
   const [prediction, setPrediction] = useState(null);
+  const api = new Api();
 
   // Use state hook to store the model input data
   const [modelInputData, setModelInputData] = useState({});
@@ -29,7 +32,6 @@ function AIModelCard(props) {
 
     // Set the metadata state to the model metadata
     setMetadata(modelMetadata);
-    console.log(modelMetadata);
 
     // Reset the prediction state to null
     setPrediction(null);
@@ -47,7 +49,6 @@ function AIModelCard(props) {
       const reader = new FileReader();
   
       reader.onload = function (e) {
-        console.log(e);
         const dataURL = e.target.result;
         setModelInputData((prevData) => ({
           ...prevData,
@@ -68,43 +69,35 @@ function AIModelCard(props) {
 
   // Define a function to handle the submit event on the form
   function handleSubmit(event) {
-    // Prevent the default browser behavior of reloading the page
     event.preventDefault();
-    // Make a POST request to the predict endpoint with the model input data
-    axios
-      .post(`http://127.0.0.1:8000/api/ai_models/${props.model.id}/predict/`, modelInputData)
-      .then((response) => {
-        var response = response.data;
-        console.log(response);
-        // Set the prediction state to the response data
-        if(response.data.type == 'IMAGE'){
-          setPrediction(
-            <>
-              <div className="predicted_image_container" style={{display:"flex", flexWrap:"wrap", width:"100%", justifyContent:"space-around", alignItems:"center"}}>
-                <div>
-                  <img src={response.data.original_image_src} className='predicted_image'/>
-                  <p>Original Image</p>
-                </div>
-                <div>
-                  <img src={response.data.encoded_image_src} className='predicted_image'/>
-                  <p>Encoded Image</p>
-                </div>
-                <div>
-                  <img src={response.data.output_image_src} className='predicted_image'/>
-                  <p>Output Image</p>
-                </div>
+    api.getModelPrediction(props.model.id, modelInputData)
+    .then(response => {
+      if(response.data.type == 'IMAGE'){
+        setPrediction(
+          <>
+            <div className="predicted_image_container" style={{display:"flex", flexWrap:"wrap", width:"100%", justifyContent:"space-around", alignItems:"center"}}>
+              <div>
+                <img src={response.data.original_image_src} className='predicted_image'/>
+                <p>Original Image</p>
               </div>
-            </>
-          )
-        }
-        else if(response.data.type == 'text'){
-          setPrediction(response.data.prediction)
-        }
-      })
-      .catch((error) => {
-        // Handle any errors
-        console.error(error);
-      });
+              <div>
+                <img src={response.data.encoded_image_src} className='predicted_image'/>
+                <p>Encoded Image</p>
+              </div>
+              <div>
+                <img src={response.data.output_image_src} className='predicted_image'/>
+                <p>Output Image</p>
+              </div>
+            </div>
+          </>
+        )
+      }
+      else if(response.data.type == 'text'){
+        setPrediction(response.data.prediction);
+      }
+    }).catch(err => {
+      console.log(err);
+    })
   }
 
   return (
@@ -217,25 +210,14 @@ function AIModelCard(props) {
 function AIModelList() {
   // Use state hook to store the AI models data
   const [models, setModels] = useState([]);
+  const api = new Api();
 
-  // Use effect hook to fetch the AI models data once the component mounts
   useEffect(() => {
-    // Make a GET request to the API endpoint for AI models
-    axios
-      .get("http://127.0.0.1:8000/api/ai_models/")
-      .then((response) => {
-        // Set the models state to the response data
-        console.log(response);
-        setModels(response.data);
+      api.getAIModels().then(models => {
+        setModels(models);
       })
-      .catch((error) => {
-        console.log(error.message);
-        // Handle any errors
-        console.error(error);
-      });
   }, []);
 
-  // Return the JSX markup for the AI model list component
   return (
     <div
       sx={{

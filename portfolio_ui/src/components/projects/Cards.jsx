@@ -1,5 +1,5 @@
 import { Box, Card, CardActionArea, CardActions, CardContent, CardMedia, Button, Typography } from "@mui/material";
-import {baseUrl} from '../../Global'
+import {staticUrl} from '../../Global'
 
 const CarouselCard = ({ project }) => {
   return (
@@ -52,7 +52,7 @@ const ProjectCard = ({ project }) => {
         <CardMedia
           component="img"
           height="140"
-          image={baseUrl + project.image}
+          image={staticUrl + project.image}
           alt={project.name}
         />
         <CardContent>

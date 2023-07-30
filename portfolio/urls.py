@@ -14,13 +14,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf.urls.static import static
 from portfolio.settings import STATIC_ROOT, STATIC_URL, MEDIA_ROOT, MEDIA_URL
-
+from .views import render_react
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
+    path('react/', render_react),
+    re_path(r'^.*?', render_react)
 ]
-urlpatterns += static(STATIC_URL, document=STATIC_ROOT)
+urlpatterns += static(STATIC_URL, document_root=STATIC_ROOT)
 urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
