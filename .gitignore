@@ -2,6 +2,9 @@ portfolio_ui/node_modules/
 portfolio_ui/.pnp.js
 portfolio_ui/.pnp
 
+#static
+static/
+
 portfolio_env/
 
 # testing
