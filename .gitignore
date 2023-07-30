@@ -3,7 +3,7 @@ portfolio_ui/.pnp.js
 portfolio_ui/.pnp
 
 #static
-static/
+/static/
 
 portfolio_env/
 
