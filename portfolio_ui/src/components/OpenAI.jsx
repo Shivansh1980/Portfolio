@@ -7,6 +7,7 @@ import { Configuration, OpenAIApi } from 'openai'
 export default function OpenAI() {
     const configuration = new Configuration({
         apiKey: "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",
+        // apiKey:"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"
     });
     const openai = new OpenAIApi(configuration);
     useEffect(()=> {
