@@ -1,9 +1,11 @@
 import {Box, Typography, CardMedia, CardAction, CardActionArea, Grid, Card, CardContent, CircularProgress } from "@mui/material"
 import { shivanshResume } from "../../data"
 import {styled} from '@mui/material/styles'
-import {useTransition, animated} from 'react-spring'
-import React, {useState} from 'react'
-
+import React, {useState, useEffect, useRef} from 'react'
+import {useSpring, animated} from 'react-spring'
+import { useInView } from "react-intersection-observer"
+import {CircularProgressbar} from 'react-circular-progressbar'
+import 'react-circular-progressbar/dist/styles.css'
 
 export const Education = () => {
     return (
@@ -13,22 +15,22 @@ export const Education = () => {
           component="div"
           gutterBottom
           className="animate__animated animate__fadeInUp"
-          sx={{width:"100%", backgroundColor:"black", color:"white", textAlign:"center", padding:"5px"}}
+          sx={{width:"100%", backgroundColor:"black", textAlign:"center", padding:"5px"}}
         >
           Education
         </Typography>
         <Grid container spacing={2} className="animate__animated animate__fadeInUp">
             {shivanshResume.education.map((edu) => (
             <Grid item xs={12} sm={6} md={4} key={edu.degree}>
-                <Card sx={{ height: "100%" }}>
+                <Card sx={{ height: "100%", backgroundColor:"#2c2c2c", boxShadow:"2px 2px 5px 5px black" }}>
                 <CardContent>
                     <Typography variant="h6" component="div">
                     {edu.degree}
                     </Typography>
-                    <Typography variant="subtitle1" color="text.secondary">
+                    <Typography variant="subtitle1">
                     {edu.duration}
                     </Typography>
-                    <Typography variant="subtitle2" color="text.secondary">
+                    <Typography variant="subtitle2">
                     {edu.score}
                     </Typography>
                 </CardContent>
@@ -39,62 +41,30 @@ export const Education = () => {
     </>
     )
 }
+  const CircularBar = (props) => {
+    const percentage = props.percentage?props.percentage:0;
+    const config = props.config?props.config:{};
 
-
-
-const SkillCard = styled(Card)(({ theme }) => ({
-    width: 200,
-    height: 200,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    color:"white",
-    backgroundColor: theme.palette.grey[900],
-    "&:hover": {
-      transform: "scale(1.1)",
-      transition: "all 0.3s ease-in-out",
-      boxShadow: theme.shadows[10],
-      // Use a dark background color on hover
-    },
-  }));
+    const [inViewRef, inView] = useInView({
+      triggerOnce: true,
+    });
   
-  // A custom SVG component to create the circular bar with border width and gradient colors
-  const SkillBar = ({ percentage }) => {
-    // Calculate the stroke dasharray and dashoffset based on the percentage
-    const radius = 50;
-    const strokeWidth = 10;
-    const circumference = 2 * Math.PI * radius;
-    const dasharray = circumference;
-    const dashoffset = circumference - (percentage / 100) * circumference;
+    const [isAnimated, setIsAnimated] = useState(false);
+  
+    useEffect(() => {
+      if (inView) {
+        setIsAnimated(true);
+      }
+    }, [inView]);
   
     return (
-    <Box component="div" display="flex">
-      <svg height="80" width="80" viewBox="0 0 120 120" style={{margin:"0 auto"}}>
-        {/* Define the gradient colors */}
-        <defs>
-          <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style={{ stopColor: "#ff0000", stopOpacity: 1 }} />
-            <stop offset="100%" style={{ stopColor: "#ffff00", stopOpacity: 1 }} />
-          </linearGradient>
-        </defs>
-        {/* Draw a circle with the gradient colors and the stroke dasharray and dashoffset */}
-        <circle
-          cx="60"
-          cy="60"
-          r={radius}
-          fill="none"
-          stroke="url(#grad1)"
-          strokeWidth={strokeWidth}
-          strokeDasharray={dasharray}
-          strokeDashoffset={dashoffset}
-        />
-        {/* Show the percentage as text in the center of the circle */}
-        <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" fontSize="24" fill="white">
-          {percentage}%
-        </text>
-      </svg>
-      </Box>
+      <div 
+        className="circular_bar" 
+        ref={inViewRef}
+        // style={{width:config.width?config.width:"100px", height:config.height?config.height:"100px"}}
+      >
+        <CircularProgressbar value={percentage} text={`${percentage}%`}/>
+      </div>
     );
   };
   
@@ -106,8 +76,7 @@ const SkillCard = styled(Card)(({ theme }) => ({
           variant="h5"
           component="div"
           gutterBottom
-          className="animate__animated animate__fadeInUp"
-          sx={{width:"100%", backgroundColor:"black", color:"white", textAlign:"center", padding:"5px"}}
+          sx={{width:"100%",textAlign:"center", padding:"5px", backgroundColor:"black"}}
         >
           Skills
         </Typography>
@@ -116,29 +85,21 @@ const SkillCard = styled(Card)(({ theme }) => ({
           sx={{
             display: "flex",
             flexWrap: "wrap",
-            gap: "10px",
+            gap: "20px",
             marginBottom: "40px",
-            // Use flexbox to align the content in center
             alignItems: "center",
             justifyContent: "center",
           }}
-          className="animate__animated animate__fadeInUp"
+          className="skills_cards_container"
         >
           {shivanshResume.skills.map((skill) => (
             // Use the custom card component for each skill
-            <SkillCard key={skill.name}>
-              <CardContent>
-                {/* Use the custom SVG component to show the percentage */}
-                <SkillBar percentage={skill.percentage} />
-                {/* Show the skill name and years of experience below the progress */}
-                <Typography variant="p" component="div" sx={{ marginTop: "10px", textAlign:"center" }}>
-                  {skill.name}
-                </Typography>
-                <Typography variant="body2" component="div" sx={{textAlign:"center"}}>
-                  {skill.years} years
-                </Typography>
-              </CardContent>
-            </SkillCard>
+            <div id={skill.name} className="skill_card">
+              <CircularBar percentage={skill.percentage} />
+              <div className="skill_card_content">
+                <p>{skill.name}</p>
+              </div>
+            </div>
           ))}
         </Box>
       </>
@@ -154,32 +115,35 @@ export const WorkExperiences = () => {
           variant="h5"
           component="div"
           gutterBottom
-          className="animate__animated animate__fadeInUp"
-          sx={{width:"100%", backgroundColor:"black", color:"white", textAlign:"center", padding:"5px"}}
+          sx={{width:"100%", textAlign:"center", padding:"5px", backgroundColor:"black"}}
         >
           Work Experience
         </Typography>
-        <Grid container spacing={2} className="animate__animated animate__fadeInUp">
+        <Grid container spacing={2}>
             {shivanshResume.workExperience.map((work) => (
             <Grid item xs={12} sm={6} md={4} key={work.company}>
                 <Card 
+                    className="work_experience_card"
                     sx={{ 
-                        height: "100%",
-                    }}
+                      width:"100%",
+                      height: "100%",
+                      backgroundColor:" #2c2c2c",
+                      boxShadow:"2px 2px 5px 5px black"
+                  }}
                 >
-                <CardContent>
-                    <Typography variant="h6" component="div">
-                        {work.company}
-                    </Typography>
-                    <Typography variant="subtitle1" color="text.secondary">
-                        {work.location}
-                    </Typography>
-                    <Typography variant="subtitle2" color="text.secondary">
-                        {work.role}
-                    </Typography>
-                    <Typography variant="subtitle2" color="text.secondary">
-                        {work.duration}
-                    </Typography>
+                <CardContent className="work_experience_card_content">
+                    <Box variant="h6" component="div" sx={{display:"flex", alignItems:"center", justifyContent:"center", flexDirection:"column", width:"100%", flexWrap:"wrap"}}>
+                      <div><img width="100px" height="100px" src={process.env.PUBLIC_URL+"/images/"+work.companyLogo}/></div>
+                      <Typography variant="h6" component="div" sx={{textAlign:"center"}}>
+                          {work.company} {work.location != "" ? `(${work.location})`: ""}
+                      </Typography>
+                      <Typography variant="subtitle2">
+                          {work.role}
+                      </Typography>
+                      <Typography variant="subtitle2">
+                          {work.duration}
+                      </Typography>
+                    </Box>
                     <ul>
                     {
                         work.achievements.map((achievement) => (

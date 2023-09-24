@@ -1,0 +1,79 @@
+.model_form {
+    position: relative;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    background-image: url('https://wallpaperaccess.com/full/1398313.jpg');
+    background-position: center;
+    background-size: cover;
+    background-color: var(--maindark);
+    overflow: visible;
+    max-width: 80%;
+    height: 350px;
+    box-shadow: 2px 2px 10px 10px black;
+    border-radius: 10px;
+    overflow-y: scroll;
+}
+
+.model_form .header {
+    font-size: 20px;
+    font-weight: bolder;
+    background-color: var(--dark);
+    padding: 0px 10px;
+    text-align: center;
+    border-radius: 5px;
+    border-width: 5px;
+    border-color: var(--dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.model_form .header p:nth-child(2){
+    font-style: italic;
+    font-weight: normal;
+    font-size: 15px;
+    text-align: center;
+    vertical-align: center;
+    margin-left:10px;
+}
+
+.cross_button {
+    position: absolute;
+    right: 0;
+    top:0;
+    margin: 5px;
+    background-color: rgb(212, 6, 6);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.cross_button:hover {
+    background-color:rgb(196, 71, 71);
+    cursor: pointer;
+}
+
+.file_container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background-color: #2c2c2c;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 2px 2px 5px 5px black;
+    margin: 10px;
+}
+.model_form button{
+    color:white;
+}
+
+.model_text_output {
+    width: 100%;
+    height: auto;
+    background-color: #2c2c2c;
+    padding: 10px;
+    box-shadow: 2px 2px 5px 5px black;
+    border-radius: 5px;
+    margin-top: 10px;
+}
